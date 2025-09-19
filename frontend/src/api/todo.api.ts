@@ -1,0 +1,22 @@
+import axios from "axios";
+import type { Todo } from "types/todo.types";
+
+const API = axios.create({
+  baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000",
+});
+
+export const getTodos = async (): Promise<Todo[]> => {
+  const res = await API.get("api/todos");
+  return res.data;
+};
+
+export const addTodo = async (
+  todoData: Omit<Todo, "id" | "createdAt" | "updatedAt">
+): Promise<Todo> => {
+  const res = await API.post("api/todos", todoData);
+  return res.data;
+};
+
+export const deleteTodo = async (id: number): Promise<void> => {
+  await API.delete(`api/todos/${id}`);
+};
