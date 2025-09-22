@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-  import type { Todo } from "types/todo.types";
-import { getTodos, addTodo, deleteTodo } from "../api/todo.api";
+import type { Todo } from "types/todo.types";
+import { getTodos, addTodo, deleteTodo, updateTodo } from "../api/todo.api";
 
 export const useTodos = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -17,8 +17,10 @@ export const useTodos = () => {
     setLoading(false);
   };
 
-  const createTodo = async (title: string) => {
-    const newTodo = await addTodo(title);
+  const createTodo = async (
+    todoData: Omit<Todo, "id" | "createdAt" | "updatedAt">
+  ) => {
+    const newTodo = await addTodo(todoData);
     setTodos((prev) => [...prev, newTodo]);
   };
 
@@ -27,5 +29,12 @@ export const useTodos = () => {
     setTodos((prev) => prev.filter((t) => t.id !== id));
   };
 
-  return { todos, loading, createTodo, removeTodo };
+  const editTodo = async (id: number, data: Partial<Todo>) => {
+    const updated = await updateTodo(id, data);
+    setTodos((prev) =>
+      prev.map((t) => (t.id === id ? { ...t, ...updated } : t))
+    );
+  };
+
+  return { todos, loading, createTodo, removeTodo, editTodo };
 };

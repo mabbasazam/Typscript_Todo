@@ -3,7 +3,7 @@ import TodoList from "../features/todo/TodoList";
 import { useTodos } from "../hooks/useTodos";
 
 export default function Home() {
-  const { todos, loading, createTodo, removeTodo } = useTodos();
+  const { todos, loading, createTodo, removeTodo, editTodo } = useTodos();
 
   return (
     <div className="max-w-lg mx-auto mt-10 p-4 bg-white rounded-lg shadow-md">
@@ -12,7 +12,7 @@ export default function Home() {
       {loading ? (
         <p className="mt-4">Loading...</p>
       ) : (
-        <TodoList todos={todos} onDelete={removeTodo} />
+        <TodoList todos={todos} onDelete={removeTodo} onUpdate={editTodo}/>
       )}
     </div>
   );

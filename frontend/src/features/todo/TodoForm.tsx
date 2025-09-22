@@ -2,15 +2,15 @@ import { useState } from "react";
 import InputField from "../../components/InputField";
 
 export interface TodoFormData {
-  id?: number; // DB generate karega
-  title: string; // Required
-  description?: string; // Optional
-  projectName?: string; // Optional
-  contact?: string; // Optional
-  email?: string; // Optional
-  name?: string; // Optional
-  createdAt?: string; // DB generate karega
-  updatedAt?: string; // DB generate karega
+  id?: number;
+  title: string;
+  description?: string;
+  projectName?: string;
+  contact?: string;
+  email?: string;
+  name?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 interface Props {
