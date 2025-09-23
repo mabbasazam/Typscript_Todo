@@ -1,6 +1,8 @@
 import axios from "axios";
 import type { Todo } from "types/todo.types";
 
+type TodoFormData = Omit<Todo, "id" | "createdAt" | "updatedAt">;
+
 const API = axios.create({
   baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000",
 });
@@ -10,9 +12,8 @@ export const getTodos = async (): Promise<Todo[]> => {
   return res.data;
 };
 
-export const addTodo = async (
-  todoData: Omit<Todo, "id" | "createdAt" | "updatedAt">
-): Promise<Todo> => {
+export const addTodo = async (todoData: TodoFormData): Promise<Todo> => {
+  console.log("TODO DATA===============", todoData);
   const res = await API.post("api/todos", todoData);
   return res.data;
 };

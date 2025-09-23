@@ -1,17 +1,8 @@
 import { useState } from "react";
 import InputField from "../../components/InputField";
+import type { Todo } from "types/todo.types";
 
-export interface TodoFormData {
-  id?: number;
-  title: string;
-  description?: string;
-  projectName?: string;
-  contact?: string;
-  email?: string;
-  name?: string;
-  createdAt?: string;
-  updatedAt?: string;
-}
+export type TodoFormData = Omit<Todo, "id" | "createdAt" | "updatedAt">;
 
 interface Props {
   onAdd: (data: TodoFormData) => void | Promise<void>;
@@ -85,6 +76,7 @@ export default function TodoForm({ onAdd }: Props) {
       <InputField
         label="Contact"
         name="contact"
+        type="number"
         value={form.contact ?? ""}
         onChange={handleChange}
         placeholder="Contact"

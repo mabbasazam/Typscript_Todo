@@ -1,9 +1,11 @@
 export interface Todo {
   id: number;
-  title: string | { [key: string]: any }; // agar kabhi object aa jaye
+  title: string;
   description?: string;
   projectName?: string;
   contact?: string;
   email?: string;
   name?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
