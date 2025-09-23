@@ -1,6 +1,7 @@
 import { useState } from "react";
 import InputField from "../../components/InputField";
 import type { Todo } from "types/todo.types";
+import Button from "../../components/Button";
 
 export type TodoFormData = Omit<Todo, "id" | "createdAt" | "updatedAt">;
 
@@ -99,9 +100,7 @@ export default function TodoForm({ onAdd }: Props) {
         placeholder="Name"
       />
 
-      <button className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
-        Add Todo
-      </button>
+      <Button variant="primary">Add Todo</Button>
     </form>
   );
 }

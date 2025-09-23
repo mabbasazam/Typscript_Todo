@@ -1,6 +1,7 @@
-import { useState } from "react";
 import type { Todo } from "types/todo.types";
 import InputField from "./InputField";
+import Button from "./Button";
+import { useTodoForm } from "../hooks/useTodoForm";
 
 interface Props {
   todo: Todo;
@@ -9,33 +10,8 @@ interface Props {
 }
 
 export default function TodoItem({ todo, onDelete, onUpdate }: Props) {
-  const [isEditing, setIsEditing] = useState(false);
-  const [editForm, setEditForm] = useState<Partial<Todo>>({
-    title: todo.title,
-    description: todo.description,
-    projectName: todo.projectName,
-    contact: todo.contact,
-    email: todo.email,
-    name: todo.name,
-  });
-  
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setEditForm((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleSave = () => {
-    if (editForm.title?.trim()) {
-      onUpdate(todo.id, editForm);
-      setIsEditing(false);
-    }
-  };
-
+  const { handleSave, handleChange, isEditing, editForm, setIsEditing } =
+    useTodoForm(todo, onUpdate);
   return (
     <div className="bg-white border border-gray-200 rounded-lg shadow-md p-5 hover:shadow-lg transition flex flex-col justify-between">
       {isEditing ? (
@@ -87,18 +63,12 @@ export default function TodoItem({ todo, onDelete, onUpdate }: Props) {
             placeholder="Name"
           />
           <div className="flex gap-2">
-            <button
-              onClick={handleSave}
-              className="bg-green-500 text-white px-3 py-1 rounded-md hover:bg-green-600"
-            >
+            <Button variant="success" onClick={handleSave}>
               Update
-            </button>
-            <button
-              onClick={() => setIsEditing(false)}
-              className="bg-gray-400 text-white px-3 py-1 rounded-md hover:bg-gray-500"
-            >
+            </Button>
+            <Button variant="secondary" onClick={() => setIsEditing(false)}>
               Cancel
-            </button>
+            </Button>
           </div>
         </div>
       ) : (
@@ -157,18 +127,20 @@ export default function TodoItem({ todo, onDelete, onUpdate }: Props) {
 
           {/* Buttons always at bottom */}
           <div className="flex gap-3 mt-6">
-            <button
+            <Button
+              variant="warning"
+              fullWidth
               onClick={() => setIsEditing(true)}
-              className="bg-yellow-500 text-white px-4 py-2 rounded-lg shadow hover:bg-yellow-600 transition flex-1"
             >
               ✏️ Edit
-            </button>
-            <button
+            </Button>
+            <Button
+              variant="danger"
+              fullWidth
               onClick={() => onDelete(todo.id)}
-              className="bg-red-500 text-white px-4 py-2 rounded-lg shadow hover:bg-red-600 transition flex-1"
             >
               🗑 Delete
-            </button>
+            </Button>
           </div>
         </>
       )}

@@ -9,3 +9,6 @@ export interface Todo {
   createdAt?: string;
   updatedAt?: string;
 }
+
+
+export type TodoFormData = Omit<Todo, "id" | "createdAt" | "updatedAt">;
