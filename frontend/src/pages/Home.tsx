@@ -1,19 +1,17 @@
 import TodoForm from "../features/todo/TodoForm";
-import TodoList from "../features/todo/TodoList";
 import { useTodos } from "../hooks/useTodos";
 
 export default function Home() {
-  const { todos, loading, createTodo, removeTodo, editTodo } = useTodos();
+  const { createTodo } = useTodos();
 
   return (
-    <div className="max-w-lg mx-auto mt-10 p-4 bg-white rounded-lg shadow-md">
+    <div className="max-w-2xl mx-auto mt-10 p-4 bg-white rounded-lg shadow-md">
       <h1 className="text-2xl font-bold mb-4">Todo App</h1>
       <TodoForm onAdd={(data) => createTodo(data)} />
-      {loading ? (
-        <p className="mt-4">Loading...</p>
-      ) : (
-        <TodoList todos={todos} onDelete={removeTodo} onUpdate={editTodo}/>
-      )}
+      <p className="mt-4 text-gray-600">
+        👉 Check your <span className="font-semibold">Todos</span> on the
+        <span className="text-blue-500"> Todos Page</span>.
+      </p>
     </div>
   );
 }

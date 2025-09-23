@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { Todo } from "types/todo.types";
+import InputField from "./InputField";
 
 interface Props {
   todo: Todo;
@@ -17,10 +18,15 @@ export default function TodoItem({ todo, onDelete, onUpdate }: Props) {
     email: todo.email,
     name: todo.name,
   });
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
-    setEditForm((prev) => ({ ...prev, [name]: value }));
+    setEditForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   const handleSave = () => {
@@ -31,52 +37,53 @@ export default function TodoItem({ todo, onDelete, onUpdate }: Props) {
   };
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg shadow-md p-5 hover:shadow-lg transition">
+    <div className="bg-white border border-gray-200 rounded-lg shadow-md p-5 hover:shadow-lg transition flex flex-col justify-between">
       {isEditing ? (
         <div className="space-y-2">
-          <input
-            type="text"
+          <InputField
+            label="Title"
             name="title"
             value={editForm.title ?? ""}
             onChange={handleChange}
-            className="border p-2 rounded-md w-full"
-            placeholder="Title"
+            placeholder="Title (required)"
+            required
           />
-          <input
-            type="text"
+          <InputField
+            label="Description"
             name="description"
             value={editForm.description ?? ""}
             onChange={handleChange}
-            className="border p-2 rounded-md w-full"
             placeholder="Description"
-          /><input
-            type="text"
+            textarea
+          />
+          <InputField
+            label="Project Name"
             name="projectName"
             value={editForm.projectName ?? ""}
             onChange={handleChange}
-            className="border p-2 rounded-md w-full"
             placeholder="Project Name"
-          /><input
-            type="text"
+          />
+          <InputField
+            label="Contact"
             name="contact"
+            type="number"
             value={editForm.contact ?? ""}
             onChange={handleChange}
-            className="border p-2 rounded-md w-full"
             placeholder="Contact"
-          /><input
-            type="text"
+          />
+          <InputField
+            label="Email"
+            type="email"
             name="email"
             value={editForm.email ?? ""}
             onChange={handleChange}
-            className="border p-2 rounded-md w-full"
             placeholder="Email"
           />
-          <input
-            type="text"
+          <InputField
+            label="Name"
             name="name"
             value={editForm.name ?? ""}
             onChange={handleChange}
-            className="border p-2 rounded-md w-full"
             placeholder="Name"
           />
           <div className="flex gap-2">
@@ -97,52 +104,71 @@ export default function TodoItem({ todo, onDelete, onUpdate }: Props) {
       ) : (
         <>
           {/* Header */}
-          <div className="flex justify-between items-start mb-3">
-            <div>
-              <h3 className="text-xl font-bold text-gray-800">{todo.title}</h3>
-              {todo.projectName && (
-                <p className="text-sm text-blue-600">{todo.projectName}</p>
-              )}
+          <div>
+            <div className="flex justify-between items-center mb-4 border-b pb-2">
+              <div>
+                <h3 className="text-2xl font-bold text-gray-800">
+                  {todo.title}
+                </h3>
+                {todo.projectName && (
+                  <p className="text-sm text-indigo-600 font-medium">
+                    {todo.projectName}
+                  </p>
+                )}
+              </div>
             </div>
-            <div className="flex gap-2">
-              <button
-                onClick={() => setIsEditing(true)}
-                className="bg-yellow-500 text-white px-3 py-1 rounded-md hover:bg-yellow-600"
-              >
-                Edit
-              </button>
-              <button
-                onClick={() => onDelete(todo.id)}
-                className="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600"
-              >
-                Delete
-              </button>
+
+            {/* Details */}
+            <div className="grid grid-cols-2 gap-4 text-gray-700 text-sm">
+              {todo.description && (
+                <div className="p-3 bg-gray-50 rounded-md shadow-sm hover:shadow-md transition">
+                  <span className="block font-medium text-gray-800">
+                    📝 Description
+                  </span>
+                  <p>{todo.description}</p>
+                </div>
+              )}
+              {todo.contact && (
+                <div className="p-3 bg-gray-50 rounded-md shadow-sm hover:shadow-md transition">
+                  <span className="block font-medium text-gray-800">
+                    📞 Contact
+                  </span>
+                  <p>{todo.contact}</p>
+                </div>
+              )}
+              {todo.email && (
+                <div className="p-3 bg-gray-50 rounded-md shadow-sm hover:shadow-md transition">
+                  <span className="block font-medium text-gray-800">
+                    📧 Email
+                  </span>
+                  <p>{todo.email}</p>
+                </div>
+              )}
+              {todo.name && (
+                <div className="p-3 bg-gray-50 rounded-md shadow-sm hover:shadow-md transition">
+                  <span className="block font-medium text-gray-800">
+                    👤 Name
+                  </span>
+                  <p>{todo.name}</p>
+                </div>
+              )}
             </div>
           </div>
 
-          {/* Details */}
-          <div className="space-y-2 text-gray-700 text-sm">
-            {todo.description && (
-              <p>
-                <span className="font-medium">📝 Description:</span>{" "}
-                {todo.description}
-              </p>
-            )}
-            {todo.contact && (
-              <p>
-                <span className="font-medium">📞 Contact:</span> {todo.contact}
-              </p>
-            )}
-            {todo.email && (
-              <p>
-                <span className="font-medium">📧 Email:</span> {todo.email}
-              </p>
-            )}
-            {todo.name && (
-              <p>
-                <span className="font-medium">👤 Name:</span> {todo.name}
-              </p>
-            )}
+          {/* Buttons always at bottom */}
+          <div className="flex gap-3 mt-6">
+            <button
+              onClick={() => setIsEditing(true)}
+              className="bg-yellow-500 text-white px-4 py-2 rounded-lg shadow hover:bg-yellow-600 transition flex-1"
+            >
+              ✏️ Edit
+            </button>
+            <button
+              onClick={() => onDelete(todo.id)}
+              className="bg-red-500 text-white px-4 py-2 rounded-lg shadow hover:bg-red-600 transition flex-1"
+            >
+              🗑 Delete
+            </button>
           </div>
         </>
       )}
